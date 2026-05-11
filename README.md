@@ -1,6 +1,6 @@
-# CS-412 Fuzzing Lab — libpng 1.6.18 / CVE-2015-8126
+# CS-412 Fuzzing Lab - libpng 1.6.18 & CVE-2015-8126
 
-This is a summary 
+This is a summary of the setup and run commands.
 
 ## Setup
 
