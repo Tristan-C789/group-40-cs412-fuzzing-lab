@@ -2,7 +2,7 @@
 FROM aflplusplus/aflplusplus:latest
 
 # Install wget & zlib
-RUN apt-get update && apt-get install -y wget zlib1g-dev 
+RUN apt-get update && apt-get install -y wget zlib1g-dev patch
 
 # Make home directory
 WORKDIR /fuzz
