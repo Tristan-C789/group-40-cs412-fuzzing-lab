@@ -13,7 +13,7 @@ docker build -t png-fuzz .
 Start a container:
 
 ```bash
-docker run -it -name png-fuzz-container png-fuzz
+docker run -it --name png-fuzz-container png-fuzz
 ```
 
 ## Inside the container
