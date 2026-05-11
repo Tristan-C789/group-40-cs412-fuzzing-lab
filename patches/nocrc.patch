@@ -1,0 +1,10 @@
+--- pngrutil.c	2015-07-23 00:00:00.000000000 +0000
++++ pngrutil.c	2026-05-11 00:00:00.000000000 +0000
+@@ -202,6 +202,7 @@
+ int /* PRIVATE */
+ png_crc_finish(png_structrp png_ptr, png_uint_32 skip)
+ {
++   return 0;
+    /* The size of the local buffer for inflate is a good guess as to a
+     * reasonable size to use for buffering reads from the application.
+     */
