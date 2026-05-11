@@ -35,16 +35,19 @@ RUN cd libpng-1.6.18 && \
     make -j$(nproc) && \
     make install
 
-# Copy 
+# Copy dependencies
 COPY src/ /fuzz/src/
 COPY seeds/ /fuzz/seeds/
 COPY Makefile /fuzz/Makefile
 
+# Copy AFL++ seeds
 RUN cp /AFLplusplus/testcases/images/png/*.png /fuzz/seeds/
 
+# Make output directories
 RUN mkdir -p findings/default
 RUN mkdir -p findings-qemu/default
 RUN mkdir -p plot_output
 RUN mkdir -p plot_output_qemu
 
+# Launch shell
 CMD ["/bin/bash"]
