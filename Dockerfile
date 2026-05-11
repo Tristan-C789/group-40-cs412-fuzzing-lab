@@ -14,7 +14,7 @@ RUN wget -q https://download.sourceforge.net/libpng/libpng-1.6.18.tar.gz && \
 
 # Patch libpng 
 COPY patches/ /fuzz/patches/
-RUN cd libpng-1.6.18 && patch -p1 < /fuzz/patches/nocrc.patch
+RUN cd libpng-1.6.18 && patch -p0 < /fuzz/patches/nocrc.patch
 
 # Compile libpng with instrumentalisation 
 RUN cd libpng-1.6.18 && \
