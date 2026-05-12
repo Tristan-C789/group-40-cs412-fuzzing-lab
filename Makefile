@@ -28,7 +28,7 @@ build-qemu:
 
 build-nosan:
 	afl-clang-fast src/harness.c \
-		-I$(LIBPNG_INSTR_PATH)/include -L$(LIBPNG_INSTR_PATH)/lib \
+		-I$(LIBPNG_VANIL_PATH)/include -L$(LIBPNG_VANIL_PATH)/lib \
 		-lpng16 -lz -lm \
 		-g -O1 \
 		-o png_fuzzer_nosan
