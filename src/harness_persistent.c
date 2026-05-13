@@ -34,7 +34,7 @@ int main(void)
 
     unsigned char *buf = __AFL_FUZZ_TESTCASE_BUF;
 
-    while (__AFL_LOOP(1000))
+    while (__AFL_LOOP(10000))
     {
         size_t len = __AFL_FUZZ_TESTCASE_LEN;
 
@@ -54,8 +54,14 @@ int main(void)
             continue;
         }
 
+        png_bytep *volatile rows = NULL;
+        volatile uint32_t allocated = 0;
+
         if (setjmp(png_jmpbuf(png)))
         {
+            for (uint32_t i = 0; i < allocated; i++)
+                free(rows[i]);
+            free(rows);
             png_destroy_read_struct(&png, &info, NULL);
             continue;
         }
@@ -79,7 +85,7 @@ int main(void)
 
         size_t rowbytes = png_get_rowbytes(png, info);
 
-        png_bytep *rows = malloc(sizeof(png_bytep) * height);
+        rows = malloc(sizeof(png_bytep) * height);
         if (!rows)
         {
             png_destroy_read_struct(&png, &info, NULL);
@@ -92,13 +98,14 @@ int main(void)
             rows[i] = malloc(rowbytes);
             if (!rows[i])
             {
-                for (uint32_t j = 0; j < i; j++)
+                for (uint32_t j = 0; j < allocated; j++)
                     free(rows[j]);
                 free(rows);
                 png_destroy_read_struct(&png, &info, NULL);
                 ok = 0;
                 break;
             }
+            allocated = i + 1;
         }
 
         if (!ok)
@@ -107,7 +114,7 @@ int main(void)
         png_read_image(png, rows);
         png_read_end(png, NULL);
 
-        for (uint32_t i = 0; i < height; i++)
+        for (uint32_t i = 0; i < allocated; i++)
             free(rows[i]);
         free(rows);
         png_destroy_read_struct(&png, &info, NULL);
