@@ -1,4 +1,5 @@
 LIBPNG_INSTR_PATH := /fuzz/install
+LIBPNG_NOSAN_PATH := /fuzz/install_noasan
 LIBPNG_VANIL_PATH := /fuzz/install_vanilla
 DICTIONARY := /AFLplusplus/dictionaries/png.dict
 SEEDS := /fuzz/seeds
@@ -28,7 +29,7 @@ build-qemu:
 
 build-nosan:
 	afl-clang-fast src/harness.c \
-		-I$(LIBPNG_VANIL_PATH)/include -L$(LIBPNG_VANIL_PATH)/lib \
+		-I$(LIBPNG_NOSAN_PATH)/include -L$(LIBPNG_NOSAN_PATH)/lib \
 		-lpng16 -lz -lm \
 		-g -O1 \
 		-o png_fuzzer_nosan
