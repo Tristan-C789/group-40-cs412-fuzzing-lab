@@ -26,6 +26,15 @@ RUN cd libpng-1.6.18 && \
     make -j$(nproc) && \
     make install
 
+# Compile libpng with instrumentalisation without ASan
+RUN cd libpng-1.6.18 && \
+    make distclean && \
+    CC=afl-clang-fast \
+    CFLAGS="-g -O1" \
+    ./configure --disable-shared --prefix=/fuzz/install_noasan && \
+    make -j$(nproc) && \
+    make install
+
 # Compile libpng without instrumentalisation
 RUN cd libpng-1.6.18 && \
     make distclean && \
