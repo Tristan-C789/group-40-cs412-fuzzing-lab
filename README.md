@@ -1,5 +1,12 @@
 # CS-412 Fuzzing Lab - libpng 1.6.18 & CVE-2015-8126
 
+The associated GitHub repository can be found at: https://github.com/Tristan-C789/group-40-cs412-fuzzing-lab.git
+
+> [!WARNING]
+> **Windows is not supported for cloning this repository.**
+> AFL++ findings artifacts use filenames containing colons, which are illegal on Windows. Cloning on Windows will succeed but checkout will fail. Use **WSL, Linux** or **macOS** instead. 
+> Since the handout is unclear about what should be included, we chose to still keepthe findings folders in the repository. Nonetheless, they can be easily recomputed using the commands below.
+
 This is a summary of the setup and run commands.
 
 ## Setup
