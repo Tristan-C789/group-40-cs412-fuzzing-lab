@@ -1,17 +1,18 @@
 LIBPNG_INSTR_PATH := /fuzz/install
+LIBPNG_BUGGY_PATH := /fuzz/install_buggy
 LIBPNG_NOSAN_PATH := /fuzz/install_noasan
 LIBPNG_VANIL_PATH := /fuzz/install_vanilla
 DICTIONARY := /AFLplusplus/dictionaries/png.dict
 SEEDS := /fuzz/seeds
 
-.PHONY: build build-instrumented build-nosan build-persistent build-qemu \
-        fuzz fuzz-qemu fuzz-nosan fuzz-persistent \
+.PHONY: build build-instrumented build-nosan build-persistent build-qemu build-buggy \
+        fuzz fuzz-qemu fuzz-bug fuzz-nosan fuzz-persistent \
         plot plot-instrumented plot-qemu \
         clean
 
 # -- Harness builds --
 
-build: build-instrumented build-qemu build-nosan build-persistent
+build: build-instrumented build-qemu build-buggy build-nosan build-persistent
 
 build-instrumented:
 	afl-clang-fast src/harness.c \
@@ -26,6 +27,13 @@ build-qemu:
 		-lpng16 -lz -lm \
 		-g -O1 \
 		-o png_fuzzer_qemu
+
+build-buggy:
+	afl-clang-fast src/harness.c \
+		-I$(LIBPNG_BUGGY_PATH)/include -L$(LIBPNG_BUGGY_PATH)/lib \
+		-lpng16 -lz -lm \
+		-fsanitize=address -g -O1 \
+		-o png_fuzzer_buggy
 
 build-nosan:
 	afl-clang-fast src/harness.c \
@@ -60,6 +68,14 @@ fuzz-qemu:
 		-x $(DICTIONARY) \
 		-- ./png_fuzzer_qemu @@
 
+fuzz-bug:
+	rm -rf findings-bug
+	afl-fuzz \
+		-i $(SEEDS) \
+		-o findings-bug \
+		-x $(DICTIONARY) \
+		-- ./png_fuzzer_buggy @@
+
 fuzz-nosan:
 	AFL_AUTORESUME=1 \
 	afl-fuzz \
@@ -91,4 +107,4 @@ plot-qemu:
 # -- Clean --
 
 clean:
-	rm -f png_fuzzer_instrumented png_fuzzer_qemu png_fuzzer_nosan png_fuzzer_persistent 
+	rm -f png_fuzzer_instrumented png_fuzzer_qemu png_fuzzer_buggy png_fuzzer_nosan png_fuzzer_persistent 

@@ -26,6 +26,18 @@ RUN cd libpng-1.6.18 && \
     make -j$(nproc) && \
     make install
 
+# Compile libpng with instrumentalisation and bug
+RUN cd libpng-1.6.18 && \
+    make distclean && \
+    patch -p0 < /fuzz/patches/bug.patch && \
+    CC=afl-clang-fast \
+    CXX=afl-clang-fast++ \
+    CFLAGS="-fsanitize=address -g -O1" \
+    LDFLAGS="-fsanitize=address" \
+    ./configure --disable-shared --prefix=/fuzz/install_buggy && \
+    make -j$(nproc) && make install && \
+    patch -R -p0 < /fuzz/patches/bug.patch
+
 # Compile libpng with instrumentalisation without ASan
 RUN cd libpng-1.6.18 && \
     make distclean && \
