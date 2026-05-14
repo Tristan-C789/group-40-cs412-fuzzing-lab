@@ -36,6 +36,12 @@ Run the QEMU campaign:
 make fuzz-qemu
 ```
 
+Run the buggy campaign:
+
+```bash
+make fuzz-bug
+```
+
 Run the specific Sanitizer-free and persistent mode campains:
 
 ```bash
@@ -49,6 +55,12 @@ Generate plots for each campaign:
 make plot
 ```
 
+Clean up compiled harnesses:
+
+```bash
+make clean
+```
+
 ## Getting results out
 
 In a separate regular terminal, run:
@@ -56,6 +68,9 @@ In a separate regular terminal, run:
 ```bash
 docker cp png-fuzz-container:/fuzz/findings ./findings
 docker cp png-fuzz-container:/fuzz/findings-qemu ./findings-qemu
+docker cp png-fuzz-container:/fuzz/findings-bug ./findings-bug
+docker cp png-fuzz-container:/fuzz/findings-nosan ./findings-nosan
+docker cp png-fuzz-container:/fuzz/findings-persistent ./findings-persistent
 docker cp png-fuzz-container:/fuzz/plot_output ./plot_output
 docker cp png-fuzz-container:/fuzz/plot_output_qemu ./plot_output_qemu
 ```
